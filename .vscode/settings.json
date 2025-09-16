@@ -2,5 +2,8 @@
     "cmake.sourceDirectory": "/home/igor/Documentos/Unicamp/25-S2/MC940/MC940-Processamento-Imagem/ift",
     "files.associations": {
         "random": "c"
-    }
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": []
 }
