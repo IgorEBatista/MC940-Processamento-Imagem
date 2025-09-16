@@ -1,0 +1,44 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc arquivo de build ativo",
+            "command": "/usr/bin/gcc",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-I${workspaceFolder}/ift/include",
+                "-I${workspaceFolder}/ift/externals/libsvm/include",
+                "-I${workspaceFolder}/ift/externals/libpng/include",
+                "-I${workspaceFolder}/ift/externals/libjpeg/include",
+                "-I${workspaceFolder}/ift/externals/zlib/include",
+                "-I${workspaceFolder}/ift/externals/tsne/include",
+                "-I${workspaceFolder}/ift/externals/libnifti/include",
+                "-L${workspaceFolder}/ift/lib",
+                "-lift",
+                "-fopenmp", // <--- Adicione esta flag
+                "-lm",
+                "-latlas",
+                "-lblas", 
+                "-llapack",
+                "-lgfortran",
+                "-lstdc++",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Tarefa gerada pelo Depurador."
+        }
+    ],
+    "version": "2.0.0"
+}

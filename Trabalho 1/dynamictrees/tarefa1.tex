@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+
+\oddsidemargin -.25in \evensidemargin -.25in \topmargin .05in
+\textheight 52pc 
+\textwidth 40pc   %6.8
+\headheight 0in \headsep 0in     %  avoid extra space for header
+\parindent 0.2in
+\usepackage{url}
+
+\title{Image Analysis \\ (MO445/MC940)} 
+\author{Prof. Alexandre Xavier Falc\~ao} 
+\date{\today}
+
+\begin{document}
+
+\maketitle 
+
+Como primeira tarefa, leiam o artigo dado sobre o método
+\textit{Dynamic Trees} e implementem um código em C que recebe uma
+imagem de entrada, um arquivo de sementes rotuladas e gera na saída o
+resultado da segmentação em uma imagem de rótulos. O artigo apresenta
+seis variantes do método com funções distintas de custo de aresta. A
+tarefa consiste em comparar os resultados desses variantes em relação
+ao resultado gerado no programa MISe
+(\url{https://github.com/LIDS-UNICAMP/MISe}), que usa um dos variantes
+como referência. Use as mesmas medidas usadas no artigo para
+comparação entre os variantes. O MISe pode ser usado para visualizar
+os resultados e escolher novas sementes. Note que, as sementes foram
+escolhidas para um dos variantes, então pode ser necessário nova
+escolha dependendo do variante. Na pasta também existe um exemplo do
+método watershed, que também deve ser usado como referência na
+comparação.
+
+Para as imagens de rótulos, o fundo tem sempre rótulo 0 e os objetos
+têm rótulos de 1 a n, dependendo do número n de objetos. Na pasta data
+vocês irão encontrar os exemplos de imagem original, imagem de rótulos
+gerada pelo MISe e arquivos de sementes rotuladas para testarem o
+programa. Usem a biblioteca da ift
+(https://github.com/LIDS-UNICAMP/ift) para implementar a tarefa,
+convertendo as imagens coloridas de RGB para o espaço Lab -- e.g.,
+iftImageToMImage(imagem,Lab\_CSPACE).
+
+A entrega da tarefa deverá ser no dia 16/09. Enviem para
+afalcao@unicamp.br um arquivo Tarefa1-SeuRA.tar.bz2, que deve conter o
+seu código e o relatório apenas. O relatório deve apresentar os
+resultados quantitativos e qualitativos de cada variante.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+

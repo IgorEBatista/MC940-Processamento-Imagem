@@ -1,0 +1,14 @@
+watershed
+Somas e tamanhos finais e médias dos objetos:
+Objeto 0: soma = 1956355, tamanho = 298567, média = 6.55
+Objeto 1: soma = 61766, tamanho = 8633, média = 7.15
+
+w1
+Somas e tamanhos finais e médias dos objetos:
+Objeto 0: soma = 146685, tamanho = 9922, média = 14.78
+Objeto 1: soma = 1871436, tamanho = 297278, média = 6.30
+
+w3 - reconquistas estão contando duas vezes
+Somas e tamanhos finais dos objetos:
+Objeto 0: soma = 2493619, tamanho = 354009
+Objeto 1: soma = 74391, tamanho = 11136
