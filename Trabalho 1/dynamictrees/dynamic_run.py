@@ -50,6 +50,45 @@ def achievable_segmentation_accuracy(seg, gt):
     return correct / seg.size
 
 
+def dice_coefficient(mask1, mask2):
+    """
+    Calcula o DICE entre dois conjuntos binários.
+    mask1, mask2: arrays booleanos (True = pixel pertencente ao conjunto)
+    """
+    intersection = np.logical_and(mask1, mask2).sum()
+    size1 = mask1.sum()
+    size2 = mask2.sum()
+    return 2.0 * intersection / (size1 + size2) if (size1 + size2) > 0 else 0.0
+
+def mean_dice(seg, gt):
+    """
+    Calcula o DICE médio entre superpixels de seg e regiões de gt.
+    """
+    dice_scores = []
+    for s in np.unique(seg):
+        mask_s = (seg == s)
+        
+        # melhor sobreposição no GT
+        best = 0
+        for g in np.unique(gt):
+            mask_g = (gt == g)
+            d = dice_coefficient(mask_s, mask_g)
+            if d > best:
+                best = d
+        dice_scores.append(best)
+    return np.mean(dice_scores)
+
+def dataset_dice(seg_list, gt_list):
+    """
+    Calcula média e desvio-padrão do DICE em um conjunto de imagens.
+    seg_list: lista de segmentações (arrays 2D)
+    gt_list:  lista de referências (arrays 2D)
+    """
+    scores = []
+    for seg, gt in zip(seg_list, gt_list):
+        scores.append(mean_dice(seg, gt))
+    return np.mean(scores), np.std(scores)
+
 os.makedirs('output', exist_ok=True)
 
 # Encontra o nome dos arquivos
