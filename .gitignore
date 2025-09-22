@@ -212,3 +212,6 @@ __marimo__/
 ift/*
 datasets/*
 notebooks/*
+
+Trabalho 1/dynamictrees/data/**/*
+Trabalho 1/dynamictrees/output/*

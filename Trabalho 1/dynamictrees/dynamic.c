@@ -100,8 +100,6 @@ iftImage *dynamic(iftMImage *img, iftAdjRel *A, iftLabeledSet *S, WeightFunc wei
     // marker = iftCreateImage(img->xsize, img->ysize, img->zsize);
     root = iftCreateImage(img->xsize, img->ysize, img->zsize);
     predecessor = iftCreateImage(img->xsize, img->ysize, img->zsize);
-    // Q     = iftCreateGQueue(iftMaximumValue(img) + 1, img->n, cost->val);
-    // Q     = iftCreateGQueue(2560, img->n, cost->val);
     Q     = iftCreateFHeap(img->n, cost->val);
 
 
@@ -202,8 +200,25 @@ iftImage *dynamic(iftMImage *img, iftAdjRel *A, iftLabeledSet *S, WeightFunc wei
             }
         }
     }
-    return label;
 
+    // libera memória
+    iftDestroyFHeap(&Q);
+    iftDestroyFImage(&cost);
+    iftDestroyImage(&predecessor);
+    iftDestroyImage(&root);
+    // iftDestroyImage(&marker);
+    for (int i = 0; i < img->m; i++)
+    {
+        free(tree_sum[i]);
+        free(obj_sum[i]);
+    }
+    free(tree_sum);
+    free(obj_sum);
+    free(tree_size);
+    free(obj_size);
+    free(tree_label);
+
+    return label;
 }
 
 int main(int argc, char *argv[])

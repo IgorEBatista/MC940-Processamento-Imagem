@@ -5,6 +5,12 @@ import time
 from skimage.segmentation import find_boundaries
 from skimage.io import imread
 
+BASE_PATH = 'data/geostar/'
+ORIG_PATH = BASE_PATH + 'orig/'
+GT_PATH = BASE_PATH + 'GT/'
+SEEDS_PATH = BASE_PATH + 'seeds/'
+OUTPUT_PATH = 'output/'
+
 
 def boundary_recall(seg, gt, tolerance=1):
     """
@@ -89,24 +95,29 @@ def dataset_dice(seg_list, gt_list):
         scores.append(mean_dice(seg, gt))
     return np.mean(scores), np.std(scores)
 
-os.makedirs('output', exist_ok=True)
+os.makedirs(OUTPUT_PATH, exist_ok=True)
 
 # Encontra o nome dos arquivos
-nomes_arquivos = os.listdir('data/')
-nomes_arquivos = [f for f in nomes_arquivos if f.endswith('.png') and not '-' in f]
+nomes_arquivos = os.listdir(ORIG_PATH)
+nomes_arquivos = [f for f in nomes_arquivos if f.endswith('.png')]
 nomes_arquivos = [f[:-4] for f in nomes_arquivos]
 nomes_arquivos.sort()
 
 # Processa cada imagem
 metricas = []
 
+print(f'Foram encontrados {len(nomes_arquivos)} imagens para processar.')
+k = 0
+total_start_time = time.time()
+
 for nome in nomes_arquivos:
-    print(f'Processando {nome}...')
+    image_start_time = time.time()
+    print(f'Processando {nome}... ({k+1}/{len(nomes_arquivos)})')
 
     # Executa o programa C para cada peso diferente
     tempos = []
     for i in range(1, 7):
-        comando = f'./dynamic data/{nome}.png data/{nome}-seeds.txt output/{nome}_w{i}.png w{i}'
+        comando = f'./dynamic {ORIG_PATH}{nome}.png {SEEDS_PATH}{nome}.txt {OUTPUT_PATH}{nome}_w{i}.png w{i}'
         tempo_inicial = time.time()
         resultado = subprocess.run(comando, shell=True, capture_output=True, text=True)
         tempo_final = time.time()
@@ -115,16 +126,16 @@ for nome in nomes_arquivos:
             print(f'Erro ao processar {nome}: {resultado.stderr}')
             continue
     # Lê a imagem de saída e o ground truth
-    ground_truth = imread(f'data/{nome}-label.png')
+    ground_truth = imread(f'{GT_PATH}{nome}.png')
 
     for i in range(1, 7):
-        seg = imread(f'output/{nome}_w{i}.png')
+        seg = imread(f'{OUTPUT_PATH}{nome}_w{i}.png')
 
         # Calcula métricas
         br = boundary_recall(seg, ground_truth)
         ue = undersegmentation_error(seg, ground_truth)
         asa = achievable_segmentation_accuracy(seg, ground_truth)
-
+        # TODO: Transformar as métricas em um DataFrame do pandas
         metricas.append({
             'imagem': nome,
             'peso': f"w{i}",
@@ -134,10 +145,17 @@ for nome in nomes_arquivos:
             'ASA': asa
         })
         print(f'  Peso w{i}: Tempo={tempos[i-1]:.2f}s, BR={br:.4f}, UE={ue:.4f}, ASA={asa:.4f}')
-    print(f"Finalizado {nome}.\n")
+    image_end_time = time.time()
+    print(f"Finalizado {nome}. Em {image_end_time - image_start_time:.2f} segundos.\n")
+    k += 1
+
+total_end_time = time.time()
+print(f'Tempo total de processamento das {len(nomes_arquivos)} imagens: {total_end_time - total_start_time:.2f} segundos.')
+
+# TODO: Salvar as métricas em CSV
 
 # Salva as métricas em um formato para Latex, com cada imagem tendo uma tabela separada
-with open('output/metricas.txt', 'w') as f:
+with open(f'{OUTPUT_PATH}metricas.txt', 'w') as f:
     for nome in nomes_arquivos:
         f.write(f'\\begin{{table}}[h]\n\\centering\n')
         f.write(f'\\begin{{tabular}}{{|c|c|c|c|c|}}\n\\hline\n')
